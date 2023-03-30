@@ -1,28 +1,14 @@
 const express=require("express")
 const router=express.Router()
 const path=require('path')
+const productsController=require('../controllers/product')
+const contactController=require('../controllers/contact')
+const submitContactController=require('../controllers/success')
 
-router.get("/addProduct",(req,res,next)=>{
 
-    res.sendFile(path.join(__dirname,'..','views','addProduct.html'))
-    
-
-})
-router.post("/addProduct",(req,res,next)=>{
-    console.log(req.body)
-
-    res.redirect("/")
-    
-})
-router.get("/contact",(req,res,next)=>{
-    res.sendFile(path.join(__dirname,'..','views','contact.html'))
-})
-router.post("/contact",(req,res,next)=>{
-
-    res.redirect("/admin/success")
-    
-})
-router.get("/success",(req,res,next)=>{
-    res.sendFile(path.join(__dirname,'..','views','success.html'))
-})
+router.get("/addProduct",productsController.getAddProduct)
+router.post("/addProduct",productsController.postAddProduct)
+router.get("/contact",contactController.contact)
+router.post("/contact",contactController.postContact)
+router.get("/success",submitContactController.submitContact)
 module.exports=router
