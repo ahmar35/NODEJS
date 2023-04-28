@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+    <h1>GENERAL STORE</h1>
+    <form onsubmit="dataStorage(event)">
+        ITEM NAME:<input type="text" id="NAME" required />
+        DESCRIPTION:<input type="text" id="DESCRIPTION" />
+        PRICE:<input type="text" id="PRICE" required />
+        QUANTITY:<input type="text" id="QUANTITY" required />
+        <button type="submit">ADD ITEM</button>
+    </form>
+    <ul id="itemList"></ul>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        function dataStorage(event) {
+            const Name = document.getElementById("NAME").value
+            const description = document.getElementById("DESCRIPTION").value
+            const price = document.getElementById("PRICE").value
+            const quantity = document.getElementById("QUANTITY").value
+            ITEM = {
+                Name,
+                description,
+                price,
+                quantity
+            }
+            event.preventDefault()
+            axios.post("http://localhost:4000/addProduct", ITEM)
+                .then((res) => {
+                    showProductOnScreen(res.data)
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
+        }
+        window.addEventListener('DOMContentLoaded', () => {
+            axios.get("http://localhost:4000/getProduct")
+                .then((res) => {
+                    for (var i = 0; i < res.data.length; i++) {
+                        showProductOnScreen(res.data[i])
+                    }
+                })
+                .catch((err) => {
+                    console.log(err)
+                    showProductOnScreen(err)
+                })
+        })
+        function showProductOnScreen(users) {
+            const parentNode = document.getElementById("itemList")
+            var childHTML = `<li id=${users.id}> Candy Name=${users.Name} -Decription=${users.description}-Price=${users.price}- Quantity=${users.quantity}
+                <button onclick =deleteProduct("${users.id}")>deleteProduct</button>
+                <button onclick=editProduct("${users.Name}","${users.quantity}","${users.price}","${users.description}","${users.id}")>edit</button>
+                <button onclick= buy1Piece("${users.id}","${users.quantity}")>buy1</button>
+                <button onclick= buy2Piece("${users.id}","${users.quantity}")>buy2</button>  
+                <button onclick= buy3Piece("${users.id}","${users.quantity}")>buy3</button>           
+                </li>`
+            parentNode.innerHTML = parentNode.innerHTML + childHTML
+        }
+        function buy1Piece(id, quantity) {
+            productQuantity = {
+                buyingQuantity: 1
+            }
+            axios.put(`http://localhost:4000/buyProduct/${id}`, productQuantity)
+                .then((res) => {
+                    location.reload(true)
+                }).catch((err)=>{
+
+                })
+        }
+        function buy2Piece(id, quantity) {
+            productQuantity = {
+                buyingQuantity: 2
+            }
+            axios.put(`http://localhost:4000/buyProduct/${id}`, productQuantity)
+                .then((res) => {
+                    location.reload(true)
+                }).catch((err)=>{
+            })
+        }
+
+        function buy3Piece(id, quantity) {
+            productQuantity = {
+                buyingQuantity: 3
+            }
+            axios.put(`http://localhost:4000/buyProduct/${id}`, productQuantity)
+                .then((res) => {
+                    location.reload(true)
+                }).catch((err)=>{
+            })
+        }
+
+        function editProduct(Name, quantity, price, description, id) {
+            document.getElementById("NAME").value = Name;
+            document.getElementById("QUANTITY").value = quantity;
+            document.getElementById("PRICE").value = price;
+            document.getElementById("DESCRIPTION").value = description;
+            axios.put(`http://localhost:4000/updateProduct/${id}`)
+                .then((res) => {
+                    deleteProduct(id)
+                }).catch((err)=>{
+            })
+        }
+        function deleteProduct(id) {
+            axios.delete(`http://localhost:4000/deleteProduct/${id}`)
+                .then((res) => {
+                    removeProductFromScreen(id)
+                }).catch((err)=>{
+            })
+        }
+        function removeProductFromScreen(id) {
+            const parentNode = document.getElementById("itemList")
+            const childNodetobeDeleted = document.getElementById(id)
+            if (childNodetobeDeleted) {
+                parentNode.removeChild(childNodetobeDeleted)
+            }
+        }
+    </script>
+</body>
+</html>
