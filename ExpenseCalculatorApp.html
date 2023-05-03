@@ -11,6 +11,8 @@
         ENTER YOUR EMAIL:<input type="text" id="email" required />
         PASSWORD:<input type="password" id="password" required />
         <button class="block" ;type="Submit">SIGN UP</button>
+        <a href="file:///D:/NodeJS/login.html">ExistingUser-click here to login</a>
+
     </form>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
 
@@ -25,14 +27,17 @@
                 EMAIL,
                 PASSWORD
             }
-            console.log(UserCredentials)
             
             axios.post("http://localhost:3000/User/SignUp",UserCredentials)
                 .then((res)=>{
-              
+                    if(res.status===201){
+                        alert('succesfully registred')
+                        window.location.href='./login.html'
+                    }
                     
 
-                }).catch(err=> alert("user already exist"))
+                }).catch(err =>alert('UserExist')
+)
         }
  
         </script>
