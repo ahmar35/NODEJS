@@ -29,11 +29,12 @@
             
             axios.post("http://localhost:3000/User/SignUp",UserCredentials)
                 .then((res)=>{
+              
+                    
 
-                })
-            
-
+                }).catch(err=> alert("user already exist"))
         }
+ 
         </script>
 </body>
 </html>
