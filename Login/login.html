@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+</head>
+
+<body>
+    <h1 id="header-title">Expense Tracker</h1>
+
+    <form onsubmit="LOGIN(event)">
+        ENTER YOUR EMAIL:<input type="text" id="email" required />
+        PASSWORD:<input type="password" id="password" required />
+        <button class="block" ;type="Submit">LOG IN</button>
+        <a href="file:///D:/NodeJS/ExpenseCalculatorApp.html">New User--Create an Account</a>
+
+    </form>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+
+    <script>
+       async function LOGIN(UserCredential){
+
+            console.log('aagaya')
+            const EMAIL=document.getElementById('email').value
+            const PASSWORD=document.getElementById('password').value
+            event.preventDefault()
+
+
+
+            UserCredentials={
+                EMAIL,
+                PASSWORD
+                
+            }
+            await axios.post("http://localhost:3000/User/LogIn",UserCredentials)
+                .then((res)=>{
+                    console.log(res)
+                    if(res.status===201){
+                        alert(res.data.message)
+                    }
+
+                })
+                .catch((err)=>{
+                    console.log(err.response)
+                    alert(err.response.data.message)
+                })
+        }
+    </script>
+    </body>
+    </html>
