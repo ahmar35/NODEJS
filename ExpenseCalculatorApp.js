@@ -5,6 +5,7 @@ const cors = require('cors')
 const sequelize = require('./UTIL/database')
 const bcrypt = require('bcrypt')
 const UserDetails = require('./models/expenseCalculatorModels')
+const ExpenseDetails=require('./models/expenseModels')
 const { error } = require('console')
 const app = express()
 app.use(cors())
@@ -57,6 +58,36 @@ app.post('/User/LogIn', async (req, res, next) => {
 
     }
 })
+
+app.post('/ExpenseForm',async(req,res,next)=>{
+    
+    
+    const Expenditure=req.body.EXPENDITURE
+    const Description=req.body.DESCRIPTION 
+    const Category=req.body.CATEGORY
+
+
+    const info =await ExpenseDetails.create({Expenditure,Description,Category})
+        res.status(201).json(info)
+    
+    
+   
+})
+app.get('/ExpenseDetails',async(req,res,next)=>{
+    const info=await ExpenseDetails.findAll()
+    res.status(200).json(info)
+})
+
+app.delete('/DeleteInfo/:id',async(req,res)=>{
+    const ID=req.params.id 
+    await ExpenseDetails.destroy({where:{id:ID}})
+    res.status(201).json({message:"deleted" })
+
+})
+
+
+
+
 //user Login End
 sequelize.sync(/* {force:true} */)
 app.listen(3000)
